@@ -1,0 +1,12 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/roshbhatia/gate/main/schema/provider.schema.json
+version: provider/v1
+name: review-gate
+description: Bound an adversarial review by its ledger, and tell each critic which revision to read
+command: [gate-provider-review-gate]
+actions:
+  gate.decide:
+    description: PreToolUse and PostToolUse on Agent, SubagentStart, UserPromptSubmit
+requires:
+  commands: [review]
+defaults:
+  timeout: 2s
