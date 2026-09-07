@@ -1,0 +1,54 @@
+version: 2
+
+before:
+  hooks:
+    - go run ./cmd/gate generate --check
+    - mkdir -p completions
+    - sh -c 'go run ./cmd/gate completion bash > completions/gate.bash'
+    - sh -c 'go run ./cmd/gate completion fish > completions/gate.fish'
+    - sh -c 'go run ./cmd/gate completion nu > completions/gate.nu'
+    - sh -c 'go run ./cmd/gate completion zsh > completions/gate.zsh'
+
+builds:
+  - id: gate
+    main: ./cmd/gate
+    binary: gate
+    env: [CGO_ENABLED=0]
+    flags: [-trimpath]
+    mod_timestamp: "{{ .CommitTimestamp }}"
+    goos: [darwin, linux]
+    goarch: [amd64, arm64]
+    ignore:
+      - goos: darwin
+        goarch: amd64
+  - id: review
+    main: ./extras/review
+    binary: review
+    env: [CGO_ENABLED=0]
+    flags: [-trimpath]
+    mod_timestamp: "{{ .CommitTimestamp }}"
+    goos: [darwin, linux]
+    goarch: [amd64, arm64]
+    ignore:
+      - goos: darwin
+        goarch: amd64
+
+archives:
+  - id: gate
+    ids: [gate, review]
+    formats: [tar.gz]
+    name_template: >-
+      {{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}
+    files:
+      - LICENSE
+      - README.md
+      - src: completions/*
+        dst: completions
+      - src: schema/*.json
+        dst: schema
+
+checksum:
+  name_template: checksums.txt
+
+changelog:
+  use: github-native
