@@ -121,7 +121,7 @@ func runStep(ctx context.Context, cfg config.Config, registry Registry, invoke I
 		Capability: gate.Action,
 		Input:      input,
 	}
-	result, err := invoke(ctx, loaded.Manifest, request, cfg.StepTimeout(step))
+	result, err := invoke(ctx, loaded.Manifest, request, timeoutFor(cfg, step, loaded.Manifest))
 	if err != nil {
 		return gate.Outcome{}, err
 	}
@@ -157,6 +157,19 @@ func DefaultInvoker(ctx context.Context, manifest provider.Manifest, request pro
 		return provider.Result{}, err
 	}
 	return invocation.Result, nil
+}
+
+// timeoutFor resolves the bound for one step: the step's own, then the
+// manifest's default, then the config default. loop-gate runs the owner's
+// STOP command and declares minutes; bash-guard declares seconds.
+func timeoutFor(cfg config.Config, step config.Step, manifest provider.Manifest) time.Duration {
+	if step.Timeout > 0 {
+		return step.Timeout
+	}
+	if declared := manifest.Defaults.Timeout.Duration(); declared > 0 {
+		return declared
+	}
+	return cfg.Defaults.Timeout
 }
 
 func matches(pattern, tool string) bool {

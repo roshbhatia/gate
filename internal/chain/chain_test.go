@@ -93,6 +93,20 @@ func TestRewriteChainsIntoTheNextProvider(t *testing.T) {
 	}
 }
 
+func TestTimeoutPrecedence(t *testing.T) {
+	c := config.Default()
+	manifest := provider.Manifest{Defaults: provider.Defaults{Timeout: provider.Duration(5 * time.Minute)}}
+	if got := timeoutFor(c, config.Step{Timeout: time.Second}, manifest); got != time.Second {
+		t.Fatalf("step timeout lost: %v", got)
+	}
+	if got := timeoutFor(c, config.Step{}, manifest); got != 5*time.Minute {
+		t.Fatalf("manifest timeout lost: %v", got)
+	}
+	if got := timeoutFor(c, config.Step{}, provider.Manifest{}); got != c.Defaults.Timeout {
+		t.Fatalf("config default lost: %v", got)
+	}
+}
+
 func TestErrorsAndMissingManifestsReadAsPassAndAreLogged(t *testing.T) {
 	s := scripted{"broken": func(gate.Request) (gate.Outcome, error) { return gate.Outcome{}, errors.New("timed out") }}
 	result := Run(context.Background(), cfg(config.Step{Provider: "broken"}, config.Step{Provider: "absent"}),
