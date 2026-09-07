@@ -1,0 +1,10 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/roshbhatia/gate/main/schema/provider.schema.json
+version: provider/v1
+name: lint-gate
+description: Run the edited file's own checker and hand the failures back
+command: [gate-provider-lint-gate]
+actions:
+  gate.decide:
+    description: PostToolUse on Edit, Write, MultiEdit
+defaults:
+  timeout: 15s

@@ -1,0 +1,10 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/roshbhatia/gate/main/schema/provider.schema.json
+version: provider/v1
+name: read-router
+description: Deny an unbounded Read of a large file and name the ranged read and the cheap reader
+command: [gate-provider-read-router]
+actions:
+  gate.decide:
+    description: PreToolUse on Read
+defaults:
+  timeout: 1s

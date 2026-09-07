@@ -1,0 +1,10 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/roshbhatia/gate/main/schema/provider.schema.json
+version: provider/v1
+name: nix-guard
+description: Deny an edit that resolves into the Nix store
+command: [gate-provider-nix-guard]
+actions:
+  gate.decide:
+    description: PreToolUse on Edit, Write, NotebookEdit
+defaults:
+  timeout: 1s

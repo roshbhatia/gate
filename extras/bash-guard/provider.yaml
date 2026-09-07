@@ -1,0 +1,10 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/roshbhatia/gate/main/schema/provider.schema.json
+version: provider/v1
+name: bash-guard
+description: Deny destructive commands, route whole-file reads of large files, bound unbounded output
+command: [gate-provider-bash-guard]
+actions:
+  gate.decide:
+    description: PreToolUse on Bash
+defaults:
+  timeout: 2s

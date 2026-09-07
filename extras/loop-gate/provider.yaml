@@ -1,0 +1,11 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/roshbhatia/gate/main/schema/provider.schema.json
+version: provider/v1
+name: loop-gate
+description: Hold a Stop until the armed command passes, with a cap and a stall bound
+command: [gate-provider-loop-gate]
+actions:
+  gate.decide:
+    description: Stop
+    argv: [decide]
+defaults:
+  timeout: 10m
