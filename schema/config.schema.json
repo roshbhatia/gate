@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$defs": {
+    "Defaults": {
+      "properties": {
+        "timeout": {
+          "type": "string"
+        },
+        "on_rewrite_unsupported": {
+          "type": "string",
+          "enum": [
+            "deny",
+            "pass"
+          ]
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "Providers": {
+      "properties": {
+        "directory": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "Step": {
+      "properties": {
+        "provider": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9._-]*$"
+        },
+        "match": {
+          "type": "string"
+        },
+        "args": {
+          "type": "object"
+        },
+        "timeout": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "provider"
+      ]
+    }
+  },
+  "properties": {
+    "version": {
+      "type": "string",
+      "enum": [
+        "gate.config/v1"
+      ]
+    },
+    "log": {
+      "type": "string"
+    },
+    "providers": {
+      "$ref": "#/$defs/Providers"
+    },
+    "defaults": {
+      "$ref": "#/$defs/Defaults"
+    },
+    "chains": {
+      "additionalProperties": {
+        "items": {
+          "$ref": "#/$defs/Step"
+        },
+        "type": "array"
+      },
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "type": "object",
+  "required": [
+    "version",
+    "chains"
+  ],
+  "title": "Gate configuration"
+}

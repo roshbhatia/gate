@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$defs": {
+    "Agent": {
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    }
+  },
+  "properties": {
+    "version": {
+      "type": "string",
+      "enum": [
+        "gate.event/v1"
+      ]
+    },
+    "harness": {
+      "type": "string"
+    },
+    "event": {
+      "type": "string"
+    },
+    "tool": {
+      "type": "string"
+    },
+    "input": {
+      "type": "object"
+    },
+    "response": true,
+    "session": {
+      "type": "string"
+    },
+    "agent": {
+      "$ref": "#/$defs/Agent"
+    },
+    "cwd": {
+      "type": "string"
+    },
+    "stopActive": {
+      "type": "boolean"
+    },
+    "lastMessage": {
+      "type": "string"
+    },
+    "prompt": {
+      "type": "string"
+    },
+    "source": {
+      "type": "string"
+    },
+    "raw": true
+  },
+  "additionalProperties": false,
+  "type": "object",
+  "required": [
+    "version",
+    "harness",
+    "event"
+  ],
+  "title": "Gate hook event"
+}

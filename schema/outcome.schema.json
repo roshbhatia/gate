@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "properties": {
+    "decision": {
+      "type": "string",
+      "enum": [
+        "pass",
+        "allow",
+        "deny",
+        "block",
+        "context"
+      ]
+    },
+    "message": {
+      "type": "string"
+    },
+    "context": {
+      "type": "string"
+    },
+    "updatedInput": {
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "type": "object",
+  "required": [
+    "decision"
+  ],
+  "title": "Gate decision"
+}
