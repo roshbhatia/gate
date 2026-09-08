@@ -18,10 +18,10 @@ import (
 // more than it saves.
 const DefaultTriggerKiB = 16
 
-// DefaultReader is the command the denial names. It is spelled out in full
-// until ask carries a per-provider light model, at which point the template
-// alone selects it.
-const DefaultReader = "ask -p claude -m haiku -t bulk-read"
+// DefaultReader is the command the denial names. The template names its own
+// provider and model, so gate does not have to know either. Override it with
+// the step's `reader` arg.
+const DefaultReader = "ask -t bulk-read"
 
 // Options come from the chain step's args.
 type Options struct {
