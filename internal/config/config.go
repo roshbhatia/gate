@@ -60,8 +60,12 @@ type Providers struct {
 
 // Config is the whole document.
 type Config struct {
-	Version   string            `json:"version" yaml:"version" jsonschema:"enum=gate.config/v1"`
-	Log       string            `json:"log,omitempty" yaml:"log,omitempty"`
+	Version string `json:"version" yaml:"version" jsonschema:"enum=gate.config/v1"`
+	Log     string `json:"log,omitempty" yaml:"log,omitempty"`
+	// LogFields names an extra record field and the environment variable it
+	// reads. The value is a variable name, not a value, so gate carries an
+	// identity it does not have to understand.
+	LogFields map[string]string `json:"log_fields,omitempty" yaml:"log_fields,omitempty"`
 	Providers Providers         `json:"providers,omitempty" yaml:"providers,omitempty"`
 	Defaults  Defaults          `json:"defaults,omitempty" yaml:"defaults,omitempty"`
 	Chains    map[string][]Step `json:"chains" yaml:"chains"`

@@ -28,7 +28,6 @@ import (
 	"github.com/roshbhatia/gate/internal/emit"
 	"github.com/roshbhatia/gate/internal/event"
 	gatelog "github.com/roshbhatia/gate/internal/log"
-	"github.com/roshbhatia/gate/internal/orc"
 	"github.com/roshbhatia/gate/pkg/gate"
 )
 
@@ -134,7 +133,7 @@ read as a pass.`,
 				Ts: started.UTC(), Harness: env.Harness, Event: env.Event, Session: env.Session,
 				Agent: env.Agent.Type, Cwd: env.Cwd, Tool: env.Tool, Final: outcome.Kind,
 				Ms: time.Since(started).Milliseconds(), Decisions: result.Decisions,
-				OrcSession: orc.Session(), OrcScope: orc.Scope(),
+				Fields: logFields(cfg.LogFields),
 			}
 			if err := gatelog.Append(cfg.Log, record); err != nil {
 				fmt.Fprintf(os.Stderr, "gate: %v\n", err)
@@ -512,4 +511,22 @@ func generated(path string, content []byte, check bool) error {
 		return err
 	}
 	return os.WriteFile(path, content, 0o644)
+}
+
+// logFields resolves the declared variable names. An unset variable is left
+// out rather than recorded empty, so a log line shows only what was bound.
+func logFields(declared map[string]string) map[string]string {
+	if len(declared) == 0 {
+		return nil
+	}
+	fields := make(map[string]string, len(declared))
+	for name, variable := range declared {
+		if value := strings.TrimSpace(os.Getenv(variable)); value != "" {
+			fields[name] = value
+		}
+	}
+	if len(fields) == 0 {
+		return nil
+	}
+	return fields
 }

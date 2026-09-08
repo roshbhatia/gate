@@ -1,5 +1,6 @@
 // Package log appends one JSON line per hook call: what each provider decided
-// and what the harness was told. traces reads it back beside the session.
+// and what the harness was told. A reader joins a line to its own records by
+// the harness session, or by whatever `log_fields` was told to carry.
 package log
 
 import (
@@ -27,16 +28,17 @@ type Record struct {
 	Harness string    `json:"harness"`
 	Event   string    `json:"event"`
 	Session string    `json:"session,omitempty"`
-	// The orc session this decision belongs to, when the harness is bound.
-	// Without it a decision joins an orc checkpoint only through orc itself.
-	OrcSession string     `json:"orc_session,omitempty"`
-	OrcScope   string     `json:"orc_scope,omitempty"`
-	Agent      string     `json:"agent,omitempty"`
-	Cwd        string     `json:"cwd,omitempty"`
-	Tool       string     `json:"tool,omitempty"`
-	Final      gate.Kind  `json:"final"`
-	Ms         int64      `json:"ms"`
-	Decisions  []Decision `json:"decisions,omitempty"`
+	// Fields carries whatever identity the config asked for. gate does not
+	// know what a field means; a neighbouring tool declares its own so a
+	// decision joins that tool's records without either side importing the
+	// other.
+	Fields    map[string]string `json:"fields,omitempty"`
+	Agent     string            `json:"agent,omitempty"`
+	Cwd       string            `json:"cwd,omitempty"`
+	Tool      string            `json:"tool,omitempty"`
+	Final     gate.Kind         `json:"final"`
+	Ms        int64             `json:"ms"`
+	Decisions []Decision        `json:"decisions,omitempty"`
 }
 
 // messageLimit keeps a record to one line of reasonable width; the full

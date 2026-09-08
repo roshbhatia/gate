@@ -63,3 +63,18 @@ func TestConfigShowIsJSON(t *testing.T) {
 		t.Fatalf("show output = %s, %v", out.String(), err)
 	}
 }
+
+func TestLogFieldsResolveDeclaredVariables(t *testing.T) {
+	t.Setenv("GATE_TEST_BOUND", " s1 ")
+	t.Setenv("GATE_TEST_UNSET", "")
+	if got := logFields(nil); got != nil {
+		t.Errorf("no declaration = %v, want nil", got)
+	}
+	if got := logFields(map[string]string{"scope": "GATE_TEST_UNSET"}); got != nil {
+		t.Errorf("an unset variable = %v, want nil", got)
+	}
+	got := logFields(map[string]string{"session": "GATE_TEST_BOUND", "scope": "GATE_TEST_UNSET"})
+	if len(got) != 1 || got["session"] != "s1" {
+		t.Errorf("declared fields = %v, want only a trimmed session", got)
+	}
+}
