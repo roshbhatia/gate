@@ -115,6 +115,7 @@ just sent waits for the next `UserPromptSubmit`.
 | `lint-gate` | Run the edited file's own checker and hand the failures back | PostToolUse on Edit, Write, MultiEdit |
 | `loop-gate` | Hold a Stop until the armed command passes, with a cap and a stall bound | Stop |
 | `nix-guard` | Deny an edit that resolves into the Nix store | PreToolUse on Edit, Write, NotebookEdit |
+| `prose-gate` | Record the style tells of a reply against the caller's vale style, remind on the next prompt, and note an oversized teammate report | Stop, UserPromptSubmit, SessionStart, PostToolUse on Agent |
 | `read-router` | Deny an unbounded Read of a large file and name the ranged read and the cheap reader | PreToolUse on Read |
 | `review-gate` | Bound an adversarial review by its ledger, and tell each critic which revision to read | PreToolUse and PostToolUse on Agent, SubagentStart, UserPromptSubmit |
 

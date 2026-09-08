@@ -1,0 +1,13 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/roshbhatia/gate/main/schema/provider.schema.json
+version: provider/v1
+name: prose-gate
+description: Record the style tells of a reply against the caller's vale style, remind on the next prompt, and note an oversized teammate report
+command: [gate-provider-prose-gate]
+actions:
+  gate.decide:
+    description: Stop, UserPromptSubmit, SessionStart, PostToolUse on Agent
+    argv: [serve]
+requires:
+  commands: [vale]
+defaults:
+  timeout: 5s
