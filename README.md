@@ -75,6 +75,23 @@ JSON; Gemini reads an exit code:
 { "PreToolUse": [{ "matcher": "", "hooks": [{ "type": "command", "command": "gate hook --harness claude --event PreToolUse" }] }] }
 ```
 
+Cursor names its events in camelCase and answers in its own shape, so it gets
+`--harness cursor --format cursor` in `~/.cursor/hooks.json` or
+`.cursor/hooks.json`. gate maps each Cursor event onto a chain: `preToolUse`
+and `postToolUse` keep their tool, with `Shell` renamed to `Bash`;
+`beforeShellExecution` and `afterShellExecution` are `Bash`; `beforeReadFile`
+is `Read`; `afterFileEdit` is `Edit`; `beforeMCPExecution` and
+`afterMCPExecution` are `mcp__<server>__<tool>`; `beforeSubmitPrompt` is
+`UserPromptSubmit`; and `stop`, `sessionStart`, `sessionEnd`, `subagentStart`,
+`subagentStop`, and `preCompact` are their Claude Code namesakes. Wire a shell
+chain to `preToolUse`, not `beforeShellExecution`: only the former can carry a
+rewritten command back, and a rewrite on the latter falls to
+`on_rewrite_unsupported`.
+
+```json
+{ "version": 1, "hooks": { "preToolUse": [{ "command": "gate hook --harness cursor --format cursor" }] } }
+```
+
 `gate config validate` loads the file and every referenced manifest. Run it at
 build time: a hook that finds a broken config at runtime exits 1, and a hook
 that cannot read its policy must not read as a pass.
@@ -209,8 +226,8 @@ read as a pass.
 | Option | Description |
 | --- | --- |
 | `--event` `<value>` | the hook event; read from the payload when omitted |
-| `--format` `<value>` | the wire shape to answer in: claude, exit-code, or json |
-| `--harness` `<value>` | which harness wrote the payload: claude, codex, gemini, or json |
+| `--format` `<value>` | the wire shape to answer in: claude, cursor, exit-code, or json |
+| `--harness` `<value>` | which harness wrote the payload: claude, codex, cursor, gemini, or json |
 
 ### `gate log`
 
