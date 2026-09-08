@@ -161,29 +161,27 @@
         {
           default = packages.gate;
           # Every provider validates against the core, with nothing else on PATH.
-          providers =
-            pkgs.runCommand "gate-provider-validation" { nativeBuildInputs = [ pkgs.jq ]; }
-              ''
-                export HOME="$TMPDIR/home"
-                export XDG_CONFIG_HOME="$TMPDIR/config"
-                export XDG_STATE_HOME="$TMPDIR/state"
-                mkdir -p "$HOME" "$XDG_CONFIG_HOME/gate/providers" "$XDG_STATE_HOME"
-                cp ${packages.extras}/share/gate/providers/*.yaml "$XDG_CONFIG_HOME/gate/providers/"
-                export PATH="${packages.full}/bin:${pkgs.coreutils}/bin:${pkgs.jq}/bin"
-                cat > "$XDG_CONFIG_HOME/gate/config.yaml" <<EOF
-                version: gate.config/v1
-                chains:
-                  PreToolUse:
-                ${lib.concatMapStringsSep "\n" (name: "    - { provider: ${name} }") providerNames}
-                EOF
-                gate config validate
-                gate provider validate
-                test "$(gate provider list --json | jq 'length')" -eq ${toString (builtins.length providerNames)}
-                echo '{"hook_event_name":"PreToolUse","tool_name":"Read","tool_input":{"file_path":"/nonexistent"},"cwd":"/"}' \
-                  | gate hook --harness claude --event PreToolUse --format json > decision
-                test ! -s decision
-                touch "$out"
-              '';
+          providers = pkgs.runCommand "gate-provider-validation" { nativeBuildInputs = [ pkgs.jq ]; } ''
+            export HOME="$TMPDIR/home"
+            export XDG_CONFIG_HOME="$TMPDIR/config"
+            export XDG_STATE_HOME="$TMPDIR/state"
+            mkdir -p "$HOME" "$XDG_CONFIG_HOME/gate/providers" "$XDG_STATE_HOME"
+            cp ${packages.extras}/share/gate/providers/*.yaml "$XDG_CONFIG_HOME/gate/providers/"
+            export PATH="${packages.full}/bin:${pkgs.coreutils}/bin:${pkgs.jq}/bin"
+            cat > "$XDG_CONFIG_HOME/gate/config.yaml" <<EOF
+            version: gate.config/v1
+            chains:
+              PreToolUse:
+            ${lib.concatMapStringsSep "\n" (name: "    - { provider: ${name} }") providerNames}
+            EOF
+            gate config validate
+            gate provider validate
+            test "$(gate provider list --json | jq 'length')" -eq ${toString (builtins.length providerNames)}
+            echo '{"hook_event_name":"PreToolUse","tool_name":"Read","tool_input":{"file_path":"/nonexistent"},"cwd":"/"}' \
+              | gate hook --harness claude --event PreToolUse --format json > decision
+            test ! -s decision
+            touch "$out"
+          '';
         }
       );
 
