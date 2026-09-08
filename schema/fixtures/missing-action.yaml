@@ -1,0 +1,8 @@
+# Rejected: Gate requires the gate.decide action.
+version: provider/v1
+name: missing-action-fixture
+description: Manifest without the gate.decide action
+command: [fixture]
+actions:
+  provider.validate:
+    description: This manifest must fail schema validation
