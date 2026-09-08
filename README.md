@@ -114,6 +114,12 @@ review reopen                                 # pass 2, only if the tree changed
 review status --md                            # the block review.md carries
 ```
 
+Providers keep that ledger and `loop-gate`'s armed command in `.gate` beside the
+work, so add `.gate/` to the repository's gitignore. `GATE_STATE_DIR` moves the
+whole directory. When `ORC_SESSION_ID` names a bound orc session, the state
+lands in `.gate/orc/<session>` instead: orc binds several sessions to one
+checkout, and an open review belongs to the session that opened it.
+
 The tier comes from the diff, once, in `~/.config/gate/review.yaml`:
 
 ```yaml
