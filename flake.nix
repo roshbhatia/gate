@@ -157,21 +157,17 @@
           lib = nixpkgs.lib;
           pkgs = nixpkgs.legacyPackages.${system};
           packages = self.packages.${system};
-          # Every provider validates against the core, with nothing on PATH but
-          # the commands the providers themselves pin.
-          providerInputs = lib.concatMap (provider: provider.passthru.runtimeInputs or [ ]) (
-            lib.attrValues packages.extras.passthru.providers
-          );
         in
         {
           default = packages.gate;
+          # Every provider validates against the core, with nothing else on PATH.
           providers = pkgs.runCommand "gate-provider-validation" { nativeBuildInputs = [ pkgs.jq ]; } ''
             export HOME="$TMPDIR/home"
             export XDG_CONFIG_HOME="$TMPDIR/config"
             export XDG_STATE_HOME="$TMPDIR/state"
             mkdir -p "$HOME" "$XDG_CONFIG_HOME/gate/providers" "$XDG_STATE_HOME"
             cp ${packages.extras}/share/gate/providers/*.yaml "$XDG_CONFIG_HOME/gate/providers/"
-            export PATH="${packages.full}/bin:${lib.makeBinPath providerInputs}:${pkgs.coreutils}/bin:${pkgs.jq}/bin"
+            export PATH="${packages.full}/bin:${pkgs.coreutils}/bin:${pkgs.jq}/bin"
             cat > "$XDG_CONFIG_HOME/gate/config.yaml" <<EOF
             version: gate.config/v1
             chains:
