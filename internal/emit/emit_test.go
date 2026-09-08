@@ -17,7 +17,7 @@ func emit(t *testing.T, format Format, out gate.Outcome) (string, string, int) {
 }
 
 func TestPassIsSilentEverywhere(t *testing.T) {
-	for _, format := range []Format{Claude, ExitCode, JSON} {
+	for _, format := range []Format{Claude, ExitCode, JSON, Cursor} {
 		stdout, stderr, code := emit(t, format, gate.PassOutcome())
 		if stdout != "" || stderr != "" || code != 0 {
 			t.Fatalf("%s pass wrote stdout=%q stderr=%q code %d", format, stdout, stderr, code)
