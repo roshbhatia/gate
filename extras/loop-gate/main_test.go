@@ -6,7 +6,6 @@ import (
 	"testing"
 
 	"github.com/roshbhatia/gate/extras/internal/state"
-	"github.com/roshbhatia/gate/internal/orc"
 	"github.com/roshbhatia/gate/pkg/gate"
 )
 
@@ -77,19 +76,5 @@ func TestDecideReportsStallAndCap(t *testing.T) {
 	Decide(stop(false))
 	if out := Decide(stop(false)); out.Kind != gate.Context || !strings.Contains(out.Message, "CAPPED") {
 		t.Fatalf("capped decision = %+v", out)
-	}
-}
-
-func TestBlockNamesTheOrcCheckpointOnlyWhenBound(t *testing.T) {
-	const note = "Write the orc checkpoint once"
-	armed(t, "false", 4, 3)
-	if out := Decide(stop(false)); strings.Contains(out.Message, note) {
-		t.Fatal("an unbound session was told about orc")
-	}
-	armed(t, "false", 4, 3)
-	t.Setenv(orc.SessionEnv, "s1")
-	t.Setenv(orc.ScopeEnv, "repo")
-	if out := Decide(stop(false)); !strings.Contains(out.Message, note) {
-		t.Fatalf("a bound session was not told about orc: %s", out.Message)
 	}
 }

@@ -14,10 +14,16 @@ A harness calls one command per event. gate normalizes the payload, runs every
 provider configured for that event whose match covers the tool, and merges the
 decisions with fixed precedence: the first deny or block wins, a rewritten
 input feeds the next provider, and every note reaches the model. Each call is
-one line in `~/.local/state/gate/decisions.jsonl`, keyed by session so
-[traces](https://github.com/roshbhatia/traces) can show it beside the turn.
-A bound harness also records `orc_session` and `orc_scope`, so a decision
-joins an orc checkpoint without reading orc's bind table.
+one line in `~/.local/state/gate/decisions.jsonl`, keyed by the harness
+session. `log_fields` adds any other identity the line should carry, each
+read from a named environment variable, so a neighbouring tool can join a
+decision to its own records without either side importing the other:
+
+```yaml
+log: ~/.local/state/gate/decisions.jsonl
+log_fields:
+  session_of_whatever_bound_this: SOME_SESSION_ID
+```
 
 Providers are executables with a
 [provider/v1](https://github.com/roshbhatia/go-utils/tree/main/provider)
@@ -118,9 +124,11 @@ review status --md                            # the block review.md carries
 
 Providers keep that ledger and `loop-gate`'s armed command in `.gate` beside the
 work, so add `.gate/` to the repository's gitignore. `GATE_STATE_DIR` moves the
-whole directory. When `ORC_SESSION_ID` names a bound orc session, the state
-lands in `.gate/orc/<session>` instead: orc binds several sessions to one
-checkout, and an open review belongs to the session that opened it.
+whole directory: an absolute value is used as given, and a relative one is
+resolved against the event's working directory. A caller that runs several
+sessions against one checkout scopes their state apart with the relative form,
+`GATE_STATE_DIR=.gate/<its own session>`, without gate knowing what a session
+is or where the hook will run.
 
 The tier comes from the diff, once, in `~/.config/gate/review.yaml`:
 

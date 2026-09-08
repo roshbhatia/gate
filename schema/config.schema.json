@@ -59,6 +59,12 @@
     "log": {
       "type": "string"
     },
+    "log_fields": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "type": "object"
+    },
     "providers": {
       "$ref": "#/$defs/Providers"
     },
