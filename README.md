@@ -16,6 +16,8 @@ decisions with fixed precedence: the first deny or block wins, a rewritten
 input feeds the next provider, and every note reaches the model. Each call is
 one line in `~/.local/state/gate/decisions.jsonl`, keyed by session so
 [traces](https://github.com/roshbhatia/traces) can show it beside the turn.
+A bound harness also records `orc_session` and `orc_scope`, so a decision
+joins an orc checkpoint without reading orc's bind table.
 
 Providers are executables with a
 [provider/v1](https://github.com/roshbhatia/go-utils/tree/main/provider)

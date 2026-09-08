@@ -28,6 +28,7 @@ import (
 	"github.com/roshbhatia/gate/internal/emit"
 	"github.com/roshbhatia/gate/internal/event"
 	gatelog "github.com/roshbhatia/gate/internal/log"
+	"github.com/roshbhatia/gate/internal/orc"
 	"github.com/roshbhatia/gate/pkg/gate"
 )
 
@@ -133,6 +134,7 @@ read as a pass.`,
 				Ts: started.UTC(), Harness: env.Harness, Event: env.Event, Session: env.Session,
 				Agent: env.Agent.Type, Cwd: env.Cwd, Tool: env.Tool, Final: outcome.Kind,
 				Ms: time.Since(started).Milliseconds(), Decisions: result.Decisions,
+				OrcSession: orc.Session(), OrcScope: orc.Scope(),
 			}
 			if err := gatelog.Append(cfg.Log, record); err != nil {
 				fmt.Fprintf(os.Stderr, "gate: %v\n", err)

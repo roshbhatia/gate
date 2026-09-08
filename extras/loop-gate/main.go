@@ -24,6 +24,7 @@ import (
 	"strings"
 
 	"github.com/roshbhatia/gate/extras/internal/state"
+	"github.com/roshbhatia/gate/internal/orc"
 	"github.com/roshbhatia/gate/pkg/gate"
 )
 
@@ -190,9 +191,18 @@ Exit code: %d
 Output:
 %s
 
-Fix the cause and continue. Do not report this phase as done while the command fails.`,
-			s.Iter, s.Max, s.Until, code, out),
+Fix the cause and continue. Do not report this phase as done while the command fails.%s`,
+			s.Iter, s.Max, s.Until, code, out, orcNote()),
 	}
+}
+
+// orcNote answers a bound orc session. A blocked Stop is not the final
+// response, so a checkpoint written now reports one milestone twice.
+func orcNote() string {
+	if !orc.Bound() {
+		return ""
+	}
+	return "\nThis turn continues, so it is not the final response. Write the orc checkpoint once, after the command exits 0."
 }
 
 func main() {
