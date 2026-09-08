@@ -23,16 +23,20 @@ type Decision struct {
 
 // Record is one hook call.
 type Record struct {
-	Ts        time.Time  `json:"ts"`
-	Harness   string     `json:"harness"`
-	Event     string     `json:"event"`
-	Session   string     `json:"session,omitempty"`
-	Agent     string     `json:"agent,omitempty"`
-	Cwd       string     `json:"cwd,omitempty"`
-	Tool      string     `json:"tool,omitempty"`
-	Final     gate.Kind  `json:"final"`
-	Ms        int64      `json:"ms"`
-	Decisions []Decision `json:"decisions,omitempty"`
+	Ts      time.Time `json:"ts"`
+	Harness string    `json:"harness"`
+	Event   string    `json:"event"`
+	Session string    `json:"session,omitempty"`
+	// The orc session this decision belongs to, when the harness is bound.
+	// Without it a decision joins an orc checkpoint only through orc itself.
+	OrcSession string     `json:"orc_session,omitempty"`
+	OrcScope   string     `json:"orc_scope,omitempty"`
+	Agent      string     `json:"agent,omitempty"`
+	Cwd        string     `json:"cwd,omitempty"`
+	Tool       string     `json:"tool,omitempty"`
+	Final      gate.Kind  `json:"final"`
+	Ms         int64      `json:"ms"`
+	Decisions  []Decision `json:"decisions,omitempty"`
 }
 
 // messageLimit keeps a record to one line of reasonable width; the full
