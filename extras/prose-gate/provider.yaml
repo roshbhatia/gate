@@ -7,7 +7,5 @@ actions:
   gate.decide:
     description: Stop, UserPromptSubmit, SessionStart, PostToolUse on Agent
     argv: [serve]
-requires:
-  commands: [vale]
 defaults:
   timeout: 5s
