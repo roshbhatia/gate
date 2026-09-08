@@ -27,4 +27,9 @@ func TestDecideOnlyDeniesStorePaths(t *testing.T) {
 			t.Fatalf("store decision = %+v", out)
 		}
 	}
+	// A new file under an existing directory resolves through its parent and
+	// keeps its own name, so a store child that does not exist yet is caught.
+	if resolved, ok := resolve(filepath.Join(dir, "new.nix")); !ok || resolved != filepath.Join(dir, "new.nix") {
+		t.Fatalf("resolve of a new file = %q, %v", resolved, ok)
+	}
 }

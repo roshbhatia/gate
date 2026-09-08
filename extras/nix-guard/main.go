@@ -12,6 +12,9 @@ import (
 
 const storePrefix = "/nix/store/"
 
+// resolve follows symlinks on the path, or on its parent when the file does
+// not exist yet. The base name is joined back so a new file under the store
+// still carries the store prefix.
 func resolve(path string) (string, bool) {
 	if resolved, err := filepath.EvalSymlinks(path); err == nil {
 		return resolved, true
@@ -20,7 +23,7 @@ func resolve(path string) (string, bool) {
 	if err != nil {
 		return "", false
 	}
-	return resolved, true
+	return filepath.Join(resolved, filepath.Base(path)), true
 }
 
 // Decide reports whether the edited path resolves into the store.
