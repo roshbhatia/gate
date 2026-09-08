@@ -202,6 +202,15 @@ func main() {
 		return
 	}
 	switch args[0] {
+	// `check` was this binary's Stop verb before gate owned the chain. A session
+	// that read its hook table before a switch still calls it, and exiting 2 on
+	// an unknown verb wedges that session's Stop rather than annoying it. Exit 0
+	// and say why: the bound cannot apply to a caller speaking the old wire, and
+	// refusing to end the turn is worse than not applying it. Removable once no
+	// session predates gate.
+	case "check":
+		fmt.Fprintln(os.Stderr, "loop-gate: `check` is gone; gate owns the Stop chain now. Restart this session to arm the loop again.")
+		os.Exit(0)
 	case "arm":
 		os.Exit(arm(args[1:]))
 	case "status":
