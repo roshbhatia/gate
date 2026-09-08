@@ -29,7 +29,13 @@ func TestDecideOnlyDeniesStorePaths(t *testing.T) {
 	}
 	// A new file under an existing directory resolves through its parent and
 	// keeps its own name, so a store child that does not exist yet is caught.
-	if resolved, ok := resolve(filepath.Join(dir, "new.nix")); !ok || resolved != filepath.Join(dir, "new.nix") {
+	// TempDir is itself behind a symlink on macOS, where /var resolves to
+	// /private/var, so the expectation has to resolve too.
+	resolvedDir, err := filepath.EvalSymlinks(dir)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if resolved, ok := resolve(filepath.Join(dir, "new.nix")); !ok || resolved != filepath.Join(resolvedDir, "new.nix") {
 		t.Fatalf("resolve of a new file = %q, %v", resolved, ok)
 	}
 }
