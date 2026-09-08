@@ -2,3 +2,5 @@
 /result
 /coverage.out
 /completions
+# Providers keep the review ledger and an armed loop here.
+/.gate/
