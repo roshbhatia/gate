@@ -9,7 +9,8 @@ import (
 )
 
 // Known lists the hook events a chain may be configured for. The names are
-// Claude Code's; codex uses the same ones and gemini's are mapped in Normalize.
+// Claude Code's; codex and gemini use the same ones and cursor's are mapped
+// in normalizeCursor.
 var Known = []string{
 	"SessionStart", "UserPromptSubmit", "PreToolUse", "PostToolUse",
 	"SubagentStart", "SubagentStop", "Stop", "SessionEnd", "Notification", "PreCompact",
@@ -48,6 +49,9 @@ func Normalize(harness, event string, raw []byte) (gate.Envelope, error) {
 			env.Event = event
 		}
 		return env, nil
+	}
+	if harness == "cursor" {
+		return normalizeCursor(event, raw)
 	}
 	var payload harnessPayload
 	if len(raw) > 0 {
