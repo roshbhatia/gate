@@ -121,7 +121,8 @@ read as a pass.`,
 			started := time.Now()
 			result := chain.Run(ctx, cfg, reg, chain.DefaultInvoker, env)
 			outcome := result.Outcome
-			if wire == emit.ExitCode && outcome.Kind == gate.Allow && outcome.UpdatedInput != nil {
+			rewrite := outcome.Kind == gate.Allow && outcome.UpdatedInput != nil
+			if rewrite && (wire == emit.ExitCode || !event.CarriesRewrite(env)) {
 				// This wire cannot carry a rewrite. Saying so beats pretending.
 				if cfg.Defaults.OnRewriteUnsupported == "deny" {
 					outcome = gate.Outcome{Kind: gate.Deny, Message: rewriteDenied(outcome), Context: outcome.Context}
@@ -142,17 +143,17 @@ read as a pass.`,
 			return nil
 		},
 	}
-	cmd.Flags().StringVar(&harness, "harness", "claude", "which harness wrote the payload: claude, codex, gemini, or json")
+	cmd.Flags().StringVar(&harness, "harness", "claude", "which harness wrote the payload: claude, codex, cursor, gemini, or json")
 	cmd.Flags().StringVar(&eventName, "event", "", "the hook event; read from the payload when omitted")
-	cmd.Flags().StringVar(&format, "format", "claude", "the wire shape to answer in: claude, exit-code, or json")
+	cmd.Flags().StringVar(&format, "format", "claude", "the wire shape to answer in: claude, cursor, exit-code, or json")
 	_ = cmd.RegisterFlagCompletionFunc("harness", func(*cobra.Command, []string, string) ([]string, cobra.ShellCompDirective) {
-		return []string{"claude", "codex", "gemini", "json"}, cobra.ShellCompDirectiveNoFileComp
+		return []string{"claude", "codex", "cursor", "gemini", "json"}, cobra.ShellCompDirectiveNoFileComp
 	})
 	_ = cmd.RegisterFlagCompletionFunc("event", func(*cobra.Command, []string, string) ([]string, cobra.ShellCompDirective) {
 		return event.Known, cobra.ShellCompDirectiveNoFileComp
 	})
 	_ = cmd.RegisterFlagCompletionFunc("format", func(*cobra.Command, []string, string) ([]string, cobra.ShellCompDirective) {
-		return []string{"claude", "exit-code", "json"}, cobra.ShellCompDirectiveNoFileComp
+		return []string{"claude", "cursor", "exit-code", "json"}, cobra.ShellCompDirectiveNoFileComp
 	})
 	return cmd
 }

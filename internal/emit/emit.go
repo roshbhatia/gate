@@ -25,15 +25,18 @@ const (
 	ExitCode Format = "exit-code"
 	// JSON is the gate.Outcome itself, for an adapter or a test.
 	JSON Format = "json"
+	// Cursor is Cursor's hook JSON on stdout: a permission with two messages,
+	// a continue flag on a prompt, a follow-up on a stop. A deny also exits 2.
+	Cursor Format = "cursor"
 )
 
 // Parse validates a format name.
 func Parse(name string) (Format, error) {
 	switch Format(name) {
-	case Claude, ExitCode, JSON:
+	case Claude, ExitCode, JSON, Cursor:
 		return Format(name), nil
 	}
-	return "", fmt.Errorf("unknown format %q; expected claude, exit-code, or json", name)
+	return "", fmt.Errorf("unknown format %q; expected claude, cursor, exit-code, or json", name)
 }
 
 type claudeHook struct {
@@ -70,6 +73,8 @@ func EmitTo(stdout, stderr io.Writer, format Format, event string, out gate.Outc
 		return exitCode(stderr, out)
 	case JSON:
 		return write(stdout, stderr, out)
+	case Cursor:
+		return cursor(stdout, stderr, event, out)
 	default:
 		return claude(stdout, stderr, event, out)
 	}
