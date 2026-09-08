@@ -31,6 +31,10 @@ pkgs.runCommand "gate-provider-${name}-${version}"
       description = "gate provider ${name}";
       mainProgram = executable;
     };
+    # The validation check puts these on its own PATH, because `gate provider
+    # validate` resolves requires.commands against the host and not against
+    # the wrapper.
+    passthru = { inherit runtimeInputs; };
   }
   ''
     mkdir -p "$out/bin" "$out/share/gate/providers"
