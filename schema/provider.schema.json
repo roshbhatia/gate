@@ -32,6 +32,12 @@
         },
         "priority": {
           "type": "integer"
+        },
+        "model": {
+          "type": "string"
+        },
+        "light": {
+          "type": "string"
         }
       },
       "additionalProperties": false,
