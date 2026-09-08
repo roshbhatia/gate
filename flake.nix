@@ -75,6 +75,7 @@
               inherit version vendorHash;
               src = ./.;
               subPackages = [ subPackage ];
+              ldflags = [ "-X main.version=${version}" ];
               nativeCheckInputs = lib.optionals check [ pkgs.git ];
               doCheck = check;
               checkPhase = lib.optionalString check ''
@@ -171,8 +172,9 @@
         in
         {
           default = packages.gate;
-          # The committed schema is the pinned spec export and every manifest
-          # satisfies the spec plus schema/narrow.cue.
+          # The committed schema is the pinned spec export, every manifest
+          # satisfies the spec plus schema/narrow.cue, and the binary reports
+          # the spec version the flake pins.
           provider-spec-contract =
             pkgs.runCommand "gate-provider-spec-contract"
               {
@@ -194,6 +196,7 @@
                     exit 1
                   fi
                 done
+                ${packages.gate}/bin/gate --version | grep --fixed-strings --line-regexp "provider/v1 spec $(cat ${provider-spec}/VERSION)"
                 touch "$out"
               '';
           # Every provider validates against the core, with nothing else on PATH.

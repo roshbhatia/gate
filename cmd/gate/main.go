@@ -52,15 +52,26 @@ func main() {
 	}
 }
 
+// version is set by the release build; a source build reports dev.
+var version = "dev"
+
+// specVersion is the provider contract the linked go-utils validates against.
+// A fleet check reads this one line from every tool.
+func specVersion() string {
+	return provider.Version + " spec " + provider.SpecVersion
+}
+
 func command() *cobra.Command {
 	root := &cobra.Command{
 		Use:           "gate",
 		Short:         "Run hook decisions through a configured provider chain",
 		Long:          about,
+		Version:       version,
 		SilenceUsage:  true,
 		SilenceErrors: true,
 		Args:          cobra.NoArgs,
 	}
+	root.SetVersionTemplate("{{.Name}} {{.Version}}\n" + specVersion() + "\n")
 	root.AddCommand(hookCommand(), configCommand(), providerCommand(), logCommand(), completionCommand(), generateCommand())
 	return root
 }
@@ -294,6 +305,7 @@ func providerCommand() *cobra.Command {
 			if err != nil {
 				return err
 			}
+			fmt.Fprintln(cmd.OutOrStdout(), specVersion())
 			failed := false
 			for _, one := range loaded {
 				if len(args) == 1 && one.Manifest.Name != args[0] {
