@@ -48,7 +48,7 @@
         let
           lib = nixpkgs.lib;
           pkgs = nixpkgs.legacyPackages.${system};
-          version = "0.1.0";
+          version = "0.2.1";
           # Refresh with `nix build .#gate` after any go.mod or go.sum change; the
           # build prints the hash it expected.
           vendorHash = "sha256-GeGKie7MSLctgm3nW2gJzpKkE42be2QyO7OrJ5P5wCU=";
