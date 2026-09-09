@@ -1,0 +1,11 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/roshbhatia/gate/main/schema/provider.schema.json
+version: provider/v1
+name: edit-event
+description: Record every agent write as an ordered delta in a shadow repository, with the prompt that asked for it
+command: [gate-provider-edit-event]
+actions:
+  gate.decide:
+    description: UserPromptSubmit, PostToolUse on Edit, Write, MultiEdit, NotebookEdit, apply_patch
+    argv: [serve]
+defaults:
+  timeout: 5s
