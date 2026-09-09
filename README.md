@@ -112,6 +112,7 @@ just sent waits for the next `UserPromptSubmit`.
 | Provider | Does | Events |
 | --- | --- | --- |
 | `bash-guard` | Deny destructive commands, route whole-file reads of large files, bound unbounded output | PreToolUse on Bash |
+| `edit-event` | Record every agent write as an ordered delta in a shadow repository, with the prompt that asked for it | UserPromptSubmit, PostToolUse on Edit, Write, MultiEdit, NotebookEdit, apply_patch |
 | `lint-gate` | Run the edited file's own checker and hand the failures back | PostToolUse on Edit, Write, MultiEdit |
 | `loop-gate` | Hold a Stop until the armed command passes, with a cap and a stall bound | Stop |
 | `nix-guard` | Deny an edit that resolves into the Nix store | PreToolUse on Edit, Write, NotebookEdit |

@@ -62,7 +62,7 @@
           version = "0.3.0";
           # Refresh with `nix build .#gate` after any go.mod or go.sum change; the
           # build prints the hash it expected.
-          vendorHash = "sha256-ITpPVaeqQGTQQ8q5oOGay10Cq5D9jJzqmfPC5mTF+/8=";
+          vendorHash = "sha256-gDrC89I1xV9jmrsI6lmN59NOJy2riUstwOehtFB7t3Y=";
           buildGo =
             {
               name,

@@ -46,9 +46,21 @@ builds:
       - goos: darwin
         goarch: amd64
 
+  - id: edit-event
+    main: ./extras/edit-event
+    binary: gate-provider-edit-event
+    env: [CGO_ENABLED=0]
+    flags: [-trimpath]
+    mod_timestamp: "{{ .CommitTimestamp }}"
+    goos: [darwin, linux]
+    goarch: [amd64, arm64]
+    ignore:
+      - goos: darwin
+        goarch: amd64
+
 archives:
   - id: gate
-    ids: [gate, review, notes]
+    ids: [gate, review, notes, edit-event]
     formats: [tar.gz]
     name_template: >-
       {{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}
