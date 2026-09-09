@@ -16,6 +16,8 @@ builds:
     env: [CGO_ENABLED=0]
     flags: [-trimpath]
     mod_timestamp: "{{ .CommitTimestamp }}"
+    ldflags:
+      - -s -w -X main.version={{ .Version }}
     goos: [darwin, linux]
     goarch: [amd64, arm64]
     ignore:

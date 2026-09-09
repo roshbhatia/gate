@@ -3,10 +3,21 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+    # The canonical provider/v1 contract. schema/narrow.cue adds Gate's rule on
+    # top of it; schema/provider.schema.json must stay byte-identical to its export.
+    provider-spec = {
+      url = "github:roshbhatia/provider-spec/v1.0.0";
+      flake = false;
+    };
   };
 
   outputs =
-    { self, nixpkgs, ... }:
+    {
+      self,
+      nixpkgs,
+      provider-spec,
+      ...
+    }:
     let
       supportedSystems = [
         "aarch64-darwin"
@@ -64,6 +75,7 @@
               inherit version vendorHash;
               src = ./.;
               subPackages = [ subPackage ];
+              ldflags = [ "-X main.version=${version}" ];
               nativeCheckInputs = lib.optionals check [ pkgs.git ];
               doCheck = check;
               checkPhase = lib.optionalString check ''
@@ -160,6 +172,33 @@
         in
         {
           default = packages.gate;
+          # The committed schema is the pinned spec export, every manifest
+          # satisfies the spec plus schema/narrow.cue, and the binary reports
+          # the spec version the flake pins.
+          provider-spec-contract =
+            pkgs.runCommand "gate-provider-spec-contract"
+              {
+                nativeBuildInputs = [
+                  pkgs.cue
+                  pkgs.diffutils
+                ];
+              }
+              ''
+                cd ${./.}
+                export HOME="$TMPDIR"
+                diff -u ${provider-spec}/schema/provider.schema.json schema/provider.schema.json
+                for manifest in extras/*/provider.yaml; do
+                  cue vet -d '#Manifest' ${provider-spec}/provider.cue schema/narrow.cue "$manifest"
+                done
+                for fixture in schema/fixtures/*.yaml; do
+                  if cue vet -d '#Manifest' ${provider-spec}/provider.cue schema/narrow.cue "$fixture" 2>/dev/null; then
+                    echo "reject expected: $fixture" >&2
+                    exit 1
+                  fi
+                done
+                ${packages.gate}/bin/gate --version | grep --fixed-strings --line-regexp "provider/v1 spec $(cat ${provider-spec}/VERSION)"
+                touch "$out"
+              '';
           # Every provider validates against the core, with nothing else on PATH.
           providers = pkgs.runCommand "gate-provider-validation" { nativeBuildInputs = [ pkgs.jq ]; } ''
             export HOME="$TMPDIR/home"
@@ -198,12 +237,14 @@
               pkgs.gotools
               pkgs.go-tools
               pkgs.goreleaser
+              pkgs.cue
               pkgs.git
               pkgs.jq
               pkgs.shfmt
             ];
             shellHook = ''
               export GOTOOLCHAIN=local
+              export PROVIDER_SPEC=${provider-spec}
             '';
           };
         }

@@ -26,9 +26,9 @@ log_fields:
 ```
 
 Providers are executables with a
-[provider/v1](https://github.com/roshbhatia/go-utils/tree/main/provider)
+[provider/v1](https://github.com/roshbhatia/provider-spec)
 manifest, the same contract `ask`, `changes`, `traces`, and `orc` use. A gate
-provider implements one action, `gate.decide`: it reads the event and the
+provider implements one action, `gate.decide` (`schema/narrow.cue`): it reads the event and the
 step's arguments, and answers `pass`, `allow` (optionally with a rewritten
 input), `deny`, `block`, or `context`. `pkg/gate.Serve` is the whole provider
 side in Go.

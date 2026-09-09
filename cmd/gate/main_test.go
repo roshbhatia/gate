@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"encoding/json"
+	"github.com/roshbhatia/go-utils/provider"
 	"os"
 	"path/filepath"
 	"strings"
@@ -76,5 +77,19 @@ func TestLogFieldsResolveDeclaredVariables(t *testing.T) {
 	got := logFields(map[string]string{"session": "GATE_TEST_BOUND", "scope": "GATE_TEST_UNSET"})
 	if len(got) != 1 || got["session"] != "s1" {
 		t.Errorf("declared fields = %v, want only a trimmed session", got)
+	}
+}
+
+func TestVersionNamesTheProviderSpec(t *testing.T) {
+	cmd := command()
+	var out bytes.Buffer
+	cmd.SetOut(&out)
+	cmd.SetArgs([]string{"--version"})
+	if err := cmd.Execute(); err != nil {
+		t.Fatal(err)
+	}
+	lines := strings.Split(strings.TrimSpace(out.String()), "\n")
+	if len(lines) != 2 || lines[1] != "provider/v1 spec "+provider.SpecVersion {
+		t.Fatalf("version output = %q", out.String())
 	}
 }
