@@ -49,7 +49,7 @@ func recordDelta(tree string, meta deltaMeta) string {
 	}
 	defer release()
 
-	relative, err := filepath.Rel(tree, meta.file)
+	relative, err := filepath.Rel(resolved(tree), resolved(meta.file))
 	if err != nil {
 		return ""
 	}
@@ -152,8 +152,22 @@ func oneLine(body string) string {
 	return strings.Join(strings.Fields(body), " ")
 }
 
+// inTree compares resolved paths. The tree comes from git as a real path, the
+// file from the harness payload as typed; on macOS /var is a symlink to
+// /private/var, so a literal prefix test skipped every edit under it.
 func inTree(tree, file string) bool {
-	return strings.HasPrefix(file, strings.TrimRight(tree, "/")+"/")
+	return strings.HasPrefix(resolved(file), strings.TrimRight(resolved(tree), "/")+"/")
+}
+
+func resolved(path string) string {
+	if real, err := filepath.EvalSymlinks(path); err == nil {
+		return real
+	}
+	// A deleted file has no target; resolve its directory instead.
+	if dir, err := filepath.EvalSymlinks(filepath.Dir(path)); err == nil {
+		return filepath.Join(dir, filepath.Base(path))
+	}
+	return path
 }
 
 func tooBig(file string) bool {
