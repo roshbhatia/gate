@@ -10,6 +10,15 @@ before:
     - sh -c 'go run ./cmd/gate completion zsh > completions/gate.zsh'
 
 builds:
+  # BEGIN GENERATED EXTRAS BUILDS
+  - {"id": "gate-provider-bash-guard", "main": "./extras/bash-guard", "binary": "gate-provider-bash-guard", "env": ["CGO_ENABLED=0"], "flags": ["-trimpath"], "goos": ["darwin", "linux"], "goarch": ["amd64", "arm64"], "ignore": [{"goos": "darwin", "goarch": "amd64"}]}
+  - {"id": "gate-provider-lint-gate", "main": "./extras/lint-gate", "binary": "gate-provider-lint-gate", "env": ["CGO_ENABLED=0"], "flags": ["-trimpath"], "goos": ["darwin", "linux"], "goarch": ["amd64", "arm64"], "ignore": [{"goos": "darwin", "goarch": "amd64"}]}
+  - {"id": "gate-provider-loop-gate", "main": "./extras/loop-gate", "binary": "gate-provider-loop-gate", "env": ["CGO_ENABLED=0"], "flags": ["-trimpath"], "goos": ["darwin", "linux"], "goarch": ["amd64", "arm64"], "ignore": [{"goos": "darwin", "goarch": "amd64"}]}
+  - {"id": "gate-provider-nix-guard", "main": "./extras/nix-guard", "binary": "gate-provider-nix-guard", "env": ["CGO_ENABLED=0"], "flags": ["-trimpath"], "goos": ["darwin", "linux"], "goarch": ["amd64", "arm64"], "ignore": [{"goos": "darwin", "goarch": "amd64"}]}
+  - {"id": "gate-provider-prose-gate", "main": "./extras/prose-gate", "binary": "gate-provider-prose-gate", "env": ["CGO_ENABLED=0"], "flags": ["-trimpath"], "goos": ["darwin", "linux"], "goarch": ["amd64", "arm64"], "ignore": [{"goos": "darwin", "goarch": "amd64"}]}
+  - {"id": "gate-provider-read-router", "main": "./extras/read-router", "binary": "gate-provider-read-router", "env": ["CGO_ENABLED=0"], "flags": ["-trimpath"], "goos": ["darwin", "linux"], "goarch": ["amd64", "arm64"], "ignore": [{"goos": "darwin", "goarch": "amd64"}]}
+  - {"id": "gate-provider-review-gate", "main": "./extras/review-gate", "binary": "gate-provider-review-gate", "env": ["CGO_ENABLED=0"], "flags": ["-trimpath"], "goos": ["darwin", "linux"], "goarch": ["amd64", "arm64"], "ignore": [{"goos": "darwin", "goarch": "amd64"}]}
+  # END GENERATED EXTRAS
   - id: gate
     main: ./cmd/gate
     binary: gate
@@ -59,8 +68,20 @@ builds:
         goarch: amd64
 
 archives:
+  # BEGIN GENERATED EXTRAS ARCHIVES
+  - {"id": "provider-bash-guard", "ids": ["gate-provider-bash-guard"], "formats": ["tar.gz"], "name_template": "gate_provider_bash-guard_{{ .Version }}_{{ .Os }}_{{ .Arch }}", "files": ["LICENSE", {"src": "extras/bash-guard/README.md", "dst": "README.md"}, {"src": "extras/bash-guard/provider.yaml", "dst": "share/gate/providers/bash-guard.yaml"}]}
+  - {"id": "provider-edit-event", "ids": ["edit-event"], "formats": ["tar.gz"], "name_template": "gate_provider_edit-event_{{ .Version }}_{{ .Os }}_{{ .Arch }}", "files": ["LICENSE", {"src": "extras/edit-event/README.md", "dst": "README.md"}, {"src": "extras/edit-event/provider.yaml", "dst": "share/gate/providers/edit-event.yaml"}]}
+  - {"id": "provider-lint-gate", "ids": ["gate-provider-lint-gate"], "formats": ["tar.gz"], "name_template": "gate_provider_lint-gate_{{ .Version }}_{{ .Os }}_{{ .Arch }}", "files": ["LICENSE", {"src": "extras/lint-gate/README.md", "dst": "README.md"}, {"src": "extras/lint-gate/provider.yaml", "dst": "share/gate/providers/lint-gate.yaml"}]}
+  - {"id": "provider-loop-gate", "ids": ["gate-provider-loop-gate"], "formats": ["tar.gz"], "name_template": "gate_provider_loop-gate_{{ .Version }}_{{ .Os }}_{{ .Arch }}", "files": ["LICENSE", {"src": "extras/loop-gate/README.md", "dst": "README.md"}, {"src": "extras/loop-gate/provider.yaml", "dst": "share/gate/providers/loop-gate.yaml"}]}
+  - {"id": "provider-nix-guard", "ids": ["gate-provider-nix-guard"], "formats": ["tar.gz"], "name_template": "gate_provider_nix-guard_{{ .Version }}_{{ .Os }}_{{ .Arch }}", "files": ["LICENSE", {"src": "extras/nix-guard/README.md", "dst": "README.md"}, {"src": "extras/nix-guard/provider.yaml", "dst": "share/gate/providers/nix-guard.yaml"}]}
+  - {"id": "provider-notes", "ids": ["notes"], "formats": ["tar.gz"], "name_template": "gate_provider_notes_{{ .Version }}_{{ .Os }}_{{ .Arch }}", "files": ["LICENSE", {"src": "extras/notes/README.md", "dst": "README.md"}, {"src": "extras/notes/provider.yaml", "dst": "share/gate/providers/notes.yaml"}]}
+  - {"id": "provider-prose-gate", "ids": ["gate-provider-prose-gate"], "formats": ["tar.gz"], "name_template": "gate_provider_prose-gate_{{ .Version }}_{{ .Os }}_{{ .Arch }}", "files": ["LICENSE", {"src": "extras/prose-gate/README.md", "dst": "README.md"}, {"src": "extras/prose-gate/provider.yaml", "dst": "share/gate/providers/prose-gate.yaml"}]}
+  - {"id": "provider-read-router", "ids": ["gate-provider-read-router"], "formats": ["tar.gz"], "name_template": "gate_provider_read-router_{{ .Version }}_{{ .Os }}_{{ .Arch }}", "files": ["LICENSE", {"src": "extras/read-router/README.md", "dst": "README.md"}, {"src": "extras/read-router/provider.yaml", "dst": "share/gate/providers/read-router.yaml"}]}
+  - {"id": "tool-review", "ids": ["review"], "formats": ["tar.gz"], "name_template": "gate_tool_review_{{ .Version }}_{{ .Os }}_{{ .Arch }}", "files": ["LICENSE", {"src": "extras/review/README.md", "dst": "README.md"}]}
+  - {"id": "provider-review-gate", "ids": ["gate-provider-review-gate"], "formats": ["tar.gz"], "name_template": "gate_provider_review-gate_{{ .Version }}_{{ .Os }}_{{ .Arch }}", "files": ["LICENSE", {"src": "extras/review-gate/README.md", "dst": "README.md"}, {"src": "extras/review-gate/provider.yaml", "dst": "share/gate/providers/review-gate.yaml"}]}
+  # END GENERATED EXTRAS
   - id: gate
-    ids: [gate, review, notes, edit-event]
+    ids: [gate]
     formats: [tar.gz]
     name_template: >-
       {{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}
@@ -77,3 +98,7 @@ checksum:
 
 changelog:
   use: github-native
+
+release:
+  extra_files:
+    - glob: package-index.json

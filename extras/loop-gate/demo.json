@@ -1,0 +1,13 @@
+{
+  "name": "loop-gate",
+  "summary": "Keep a repair task active until its tests pass",
+  "replay": false,
+  "core": "gate",
+  "nix": "github:roshbhatia/gate#provider-loop-gate",
+  "brew": "gate-provider-loop-gate",
+  "binary": "gate-provider-loop-gate",
+  "dependencies": [
+    "bash"
+  ],
+  "manifest_path": "share/gate/providers/loop-gate.yaml"
+}

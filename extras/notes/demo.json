@@ -1,0 +1,13 @@
+{
+  "name": "notes",
+  "summary": "Present an unanswered token validation note",
+  "replay": false,
+  "core": "gate",
+  "nix": "github:roshbhatia/gate#provider-notes",
+  "brew": "gate-provider-notes",
+  "binary": "gate-provider-notes",
+  "dependencies": [
+    "roshbhatia/tap/agent-notes"
+  ],
+  "manifest_path": "share/gate/providers/notes.yaml"
+}

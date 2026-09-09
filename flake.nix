@@ -3,6 +3,8 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+    agent-notes.url = "github:roshbhatia/agent-notes";
+    agent-notes.inputs.nixpkgs.follows = "nixpkgs";
     # The canonical provider/v1 contract. schema/narrow.cue adds Gate's rule on
     # top of it; schema/provider.schema.json must stay byte-identical to its export.
     provider-spec = {
@@ -16,6 +18,7 @@
       self,
       nixpkgs,
       provider-spec,
+      agent-notes,
       ...
     }:
     let
@@ -59,7 +62,7 @@
         let
           lib = nixpkgs.lib;
           pkgs = nixpkgs.legacyPackages.${system};
-          version = "0.4.1";
+          version = "0.5.0";
           # Refresh with `nix build .#gate` after any go.mod or go.sum change; the
           # build prints the hash it expected.
           vendorHash = "sha256-gDrC89I1xV9jmrsI6lmN59NOJy2riUstwOehtFB7t3Y=";
@@ -121,6 +124,7 @@
           };
           providerScope = pkgs // {
             inherit mkProvider;
+            agent-notes = agent-notes.packages.${system}.default;
           };
           providers = lib.genAttrs providerNames (
             name: lib.callPackageWith providerScope (./extras + "/${name}/default.nix") { }
@@ -232,6 +236,9 @@
         {
           default = pkgs.mkShellNoCC {
             packages = [
+              pkgs.python3
+              pkgs.vhs
+              pkgs.ffmpeg
               pkgs.go
               pkgs.gopls
               pkgs.gotools

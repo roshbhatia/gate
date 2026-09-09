@@ -1,0 +1,10 @@
+{
+  "name": "nix-guard",
+  "summary": "Detect a managed configuration path before editing",
+  "replay": false,
+  "core": "gate",
+  "nix": "github:roshbhatia/gate#provider-nix-guard",
+  "brew": "gate-provider-nix-guard",
+  "binary": "gate-provider-nix-guard",
+  "manifest_path": "share/gate/providers/nix-guard.yaml"
+}

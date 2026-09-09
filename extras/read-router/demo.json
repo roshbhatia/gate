@@ -1,0 +1,10 @@
+{
+  "name": "read-router",
+  "summary": "Select the token parser lines needed for review",
+  "replay": false,
+  "core": "gate",
+  "nix": "github:roshbhatia/gate#provider-read-router",
+  "brew": "gate-provider-read-router",
+  "binary": "gate-provider-read-router",
+  "manifest_path": "share/gate/providers/read-router.yaml"
+}

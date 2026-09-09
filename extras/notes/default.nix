@@ -1,6 +1,6 @@
-{ mkProvider }:
+{ mkProvider, agent-notes }:
 mkProvider {
   name = "notes";
   manifest = ./provider.yaml;
-  aliases = [ "note" ];
+  runtimeInputs = [ agent-notes ];
 }

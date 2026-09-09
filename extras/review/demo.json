@@ -1,0 +1,12 @@
+{
+  "name": "review",
+  "summary": "Open a review ledger for the token parser change",
+  "replay": false,
+  "core": "gate",
+  "nix": "github:roshbhatia/gate#review",
+  "brew": "gate-review",
+  "binary": "review",
+  "dependencies": [
+    "git"
+  ]
+}

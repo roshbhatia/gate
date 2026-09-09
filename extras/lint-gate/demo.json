@@ -1,0 +1,18 @@
+{
+  "name": "lint-gate",
+  "summary": "Check token parser formatting after an edit",
+  "replay": false,
+  "core": "gate",
+  "nix": "github:roshbhatia/gate#provider-lint-gate",
+  "brew": "gate-provider-lint-gate",
+  "binary": "gate-provider-lint-gate",
+  "dependencies": [
+    "statix",
+    "ruff",
+    "shellcheck",
+    "stylua",
+    "taplo"
+  ],
+  "runtime_note": "Nix includes every configured linter. Homebrew supplies the available formulae; install `deadnix` separately for Nix file checks. Go checks also require `gofmt` from your Go toolchain.",
+  "manifest_path": "share/gate/providers/lint-gate.yaml"
+}

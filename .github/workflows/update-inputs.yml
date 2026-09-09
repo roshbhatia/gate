@@ -1,0 +1,39 @@
+name: Update inputs
+on:
+  schedule:
+    - cron: "23 */6 * * *"
+  workflow_dispatch: {}
+permissions:
+  contents: write
+  pull-requests: write
+env:
+  GH_TOKEN: ${{ github.token }}
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: DeterminateSystems/nix-installer-action@v22
+      - name: Update all tracked flakes
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python3 -m unittest discover -s hack -p "test_update_flakes.py"
+          python3 hack/update-flakes.py
+      - name: Check updated inputs
+        run: nix flake check -L
+      - name: Refresh extra documentation
+        run: |
+          python3 hack/extra-docs.py
+          if ! python3 hack/extra-demos.py --check; then
+            nix develop --accept-flake-config -c python3 hack/extra-demos.py
+          fi
+          python3 hack/release-extras.py
+
+      - uses: peter-evans/create-pull-request@v8
+        with:
+          branch: automation/update-inputs
+          title: "chore: update flake inputs"
+          commit-message: "chore: update flake inputs"
+          body: "Updates tracked flake inputs after local checks."

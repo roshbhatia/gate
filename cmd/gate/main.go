@@ -84,7 +84,7 @@ func (r registry) Lookup(name string) (provider.LoadedManifest, bool) {
 }
 
 func loadRegistry(cfg config.Config) (registry, error) {
-	loaded, err := provider.Discover(cfg.Providers.Directory)
+	loaded, err := discoverProviders(cfg)
 	if err != nil {
 		return nil, err
 	}
@@ -267,14 +267,14 @@ func providerCommand() *cobra.Command {
 	var asJSON bool
 	list := &cobra.Command{
 		Use:   "list",
-		Short: "List the providers in the providers directory",
+		Short: "List configured and installed providers",
 		Args:  cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			cfg, err := config.Load()
 			if err != nil {
 				return err
 			}
-			loaded, err := provider.Discover(cfg.Providers.Directory)
+			loaded, err := discoverProviders(cfg)
 			if err != nil {
 				return err
 			}
@@ -301,7 +301,7 @@ func providerCommand() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			loaded, err := provider.Discover(cfg.Providers.Directory)
+			loaded, err := discoverProviders(cfg)
 			if err != nil {
 				return err
 			}

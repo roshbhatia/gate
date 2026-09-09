@@ -1,0 +1,10 @@
+{
+  "name": "bash-guard",
+  "summary": "Read a large token parser with bounded output",
+  "replay": false,
+  "core": "gate",
+  "nix": "github:roshbhatia/gate#provider-bash-guard",
+  "brew": "gate-provider-bash-guard",
+  "binary": "gate-provider-bash-guard",
+  "manifest_path": "share/gate/providers/bash-guard.yaml"
+}

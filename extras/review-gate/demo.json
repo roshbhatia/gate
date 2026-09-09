@@ -1,0 +1,13 @@
+{
+  "name": "review-gate",
+  "summary": "Require a review ledger before the critic starts",
+  "replay": false,
+  "core": "gate",
+  "nix": "github:roshbhatia/gate#provider-review-gate",
+  "brew": "gate-provider-review-gate",
+  "binary": "gate-provider-review-gate",
+  "dependencies": [
+    "roshbhatia/tap/gate-review"
+  ],
+  "manifest_path": "share/gate/providers/review-gate.yaml"
+}

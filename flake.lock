@@ -1,5 +1,25 @@
 {
   "nodes": {
+    "agent-notes": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1788973075,
+        "narHash": "sha256-/qZIp39MfCuUVPLxeNAIOTei3iAJQ8Up+q+i5twv904=",
+        "owner": "roshbhatia",
+        "repo": "agent-notes",
+        "rev": "087c8c068234c62c49a78f5d99e617ad868daeaa",
+        "type": "github"
+      },
+      "original": {
+        "owner": "roshbhatia",
+        "repo": "agent-notes",
+        "type": "github"
+      }
+    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1788549839,
@@ -35,6 +55,7 @@
     },
     "root": {
       "inputs": {
+        "agent-notes": "agent-notes",
         "nixpkgs": "nixpkgs",
         "provider-spec": "provider-spec"
       }

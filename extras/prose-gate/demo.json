@@ -1,0 +1,13 @@
+{
+  "name": "prose-gate",
+  "summary": "Check a release note before publication",
+  "replay": false,
+  "core": "gate",
+  "nix": "github:roshbhatia/gate#provider-prose-gate",
+  "brew": "gate-provider-prose-gate",
+  "binary": "gate-provider-prose-gate",
+  "dependencies": [
+    "vale"
+  ],
+  "manifest_path": "share/gate/providers/prose-gate.yaml"
+}

@@ -1,0 +1,13 @@
+{
+  "name": "edit-event",
+  "summary": "Record the token parser change for the editor",
+  "replay": false,
+  "core": "gate",
+  "nix": "github:roshbhatia/gate#provider-edit-event",
+  "brew": "gate-provider-edit-event",
+  "binary": "gate-provider-edit-event",
+  "dependencies": [
+    "git"
+  ],
+  "manifest_path": "share/gate/providers/edit-event.yaml"
+}

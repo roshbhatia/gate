@@ -1,0 +1,265 @@
+{
+  "version": 1,
+  "providers": [
+    {
+      "name": "bash-guard",
+      "summary": "Read a large token parser with bounded output",
+      "replay": false,
+      "core": "gate",
+      "nix": "github:roshbhatia/gate#provider-bash-guard",
+      "brew": "gate-provider-bash-guard",
+      "binary": "gate-provider-bash-guard",
+      "manifest_path": "share/gate/providers/bash-guard.yaml"
+    },
+    {
+      "name": "edit-event",
+      "summary": "Record the token parser change for the editor",
+      "replay": false,
+      "core": "gate",
+      "nix": "github:roshbhatia/gate#provider-edit-event",
+      "brew": "gate-provider-edit-event",
+      "binary": "gate-provider-edit-event",
+      "dependencies": [
+        "git"
+      ],
+      "manifest_path": "share/gate/providers/edit-event.yaml"
+    },
+    {
+      "name": "lint-gate",
+      "summary": "Check token parser formatting after an edit",
+      "replay": false,
+      "core": "gate",
+      "nix": "github:roshbhatia/gate#provider-lint-gate",
+      "brew": "gate-provider-lint-gate",
+      "binary": "gate-provider-lint-gate",
+      "dependencies": [
+        "statix",
+        "ruff",
+        "shellcheck",
+        "stylua",
+        "taplo"
+      ],
+      "runtime_note": "Nix includes every configured linter. Homebrew supplies the available formulae; install `deadnix` separately for Nix file checks. Go checks also require `gofmt` from your Go toolchain.",
+      "manifest_path": "share/gate/providers/lint-gate.yaml"
+    },
+    {
+      "name": "loop-gate",
+      "summary": "Keep a repair task active until its tests pass",
+      "replay": false,
+      "core": "gate",
+      "nix": "github:roshbhatia/gate#provider-loop-gate",
+      "brew": "gate-provider-loop-gate",
+      "binary": "gate-provider-loop-gate",
+      "dependencies": [
+        "bash"
+      ],
+      "manifest_path": "share/gate/providers/loop-gate.yaml"
+    },
+    {
+      "name": "nix-guard",
+      "summary": "Detect a managed configuration path before editing",
+      "replay": false,
+      "core": "gate",
+      "nix": "github:roshbhatia/gate#provider-nix-guard",
+      "brew": "gate-provider-nix-guard",
+      "binary": "gate-provider-nix-guard",
+      "manifest_path": "share/gate/providers/nix-guard.yaml"
+    },
+    {
+      "name": "notes",
+      "summary": "Present an unanswered token validation note",
+      "replay": false,
+      "core": "gate",
+      "nix": "github:roshbhatia/gate#provider-notes",
+      "brew": "gate-provider-notes",
+      "binary": "gate-provider-notes",
+      "dependencies": [
+        "roshbhatia/tap/agent-notes"
+      ],
+      "manifest_path": "share/gate/providers/notes.yaml"
+    },
+    {
+      "name": "prose-gate",
+      "summary": "Check a release note before publication",
+      "replay": false,
+      "core": "gate",
+      "nix": "github:roshbhatia/gate#provider-prose-gate",
+      "brew": "gate-provider-prose-gate",
+      "binary": "gate-provider-prose-gate",
+      "dependencies": [
+        "vale"
+      ],
+      "manifest_path": "share/gate/providers/prose-gate.yaml"
+    },
+    {
+      "name": "read-router",
+      "summary": "Select the token parser lines needed for review",
+      "replay": false,
+      "core": "gate",
+      "nix": "github:roshbhatia/gate#provider-read-router",
+      "brew": "gate-provider-read-router",
+      "binary": "gate-provider-read-router",
+      "manifest_path": "share/gate/providers/read-router.yaml"
+    },
+    {
+      "name": "review",
+      "summary": "Open a review ledger for the token parser change",
+      "replay": false,
+      "core": "gate",
+      "nix": "github:roshbhatia/gate#review",
+      "brew": "gate-review",
+      "binary": "review",
+      "dependencies": [
+        "git"
+      ]
+    },
+    {
+      "name": "review-gate",
+      "summary": "Require a review ledger before the critic starts",
+      "replay": false,
+      "core": "gate",
+      "nix": "github:roshbhatia/gate#provider-review-gate",
+      "brew": "gate-provider-review-gate",
+      "binary": "gate-provider-review-gate",
+      "dependencies": [
+        "roshbhatia/tap/gate-review"
+      ],
+      "manifest_path": "share/gate/providers/review-gate.yaml"
+    }
+  ],
+  "packages": [
+    {
+      "name": "gate-provider-bash-guard",
+      "kind": "provider",
+      "binary": "gate-provider-bash-guard",
+      "description": "Read a large token parser with bounded output",
+      "archive": "gate_provider_bash-guard_%{version}_%{os}_%{arch}.tar.gz",
+      "share": [
+        "share/gate/providers/bash-guard.yaml"
+      ],
+      "python_script": false
+    },
+    {
+      "name": "gate-provider-edit-event",
+      "kind": "provider",
+      "binary": "gate-provider-edit-event",
+      "description": "Record the token parser change for the editor",
+      "archive": "gate_provider_edit-event_%{version}_%{os}_%{arch}.tar.gz",
+      "share": [
+        "share/gate/providers/edit-event.yaml"
+      ],
+      "python_script": false,
+      "dependencies": [
+        "git"
+      ]
+    },
+    {
+      "name": "gate-provider-lint-gate",
+      "kind": "provider",
+      "binary": "gate-provider-lint-gate",
+      "description": "Check token parser formatting after an edit",
+      "archive": "gate_provider_lint-gate_%{version}_%{os}_%{arch}.tar.gz",
+      "share": [
+        "share/gate/providers/lint-gate.yaml"
+      ],
+      "python_script": false,
+      "dependencies": [
+        "statix",
+        "ruff",
+        "shellcheck",
+        "stylua",
+        "taplo"
+      ]
+    },
+    {
+      "name": "gate-provider-loop-gate",
+      "kind": "provider",
+      "binary": "gate-provider-loop-gate",
+      "description": "Keep a repair task active until its tests pass",
+      "archive": "gate_provider_loop-gate_%{version}_%{os}_%{arch}.tar.gz",
+      "share": [
+        "share/gate/providers/loop-gate.yaml"
+      ],
+      "python_script": false,
+      "dependencies": [
+        "bash"
+      ]
+    },
+    {
+      "name": "gate-provider-nix-guard",
+      "kind": "provider",
+      "binary": "gate-provider-nix-guard",
+      "description": "Detect a managed configuration path before editing",
+      "archive": "gate_provider_nix-guard_%{version}_%{os}_%{arch}.tar.gz",
+      "share": [
+        "share/gate/providers/nix-guard.yaml"
+      ],
+      "python_script": false
+    },
+    {
+      "name": "gate-provider-notes",
+      "kind": "provider",
+      "binary": "gate-provider-notes",
+      "description": "Present an unanswered token validation note",
+      "archive": "gate_provider_notes_%{version}_%{os}_%{arch}.tar.gz",
+      "share": [
+        "share/gate/providers/notes.yaml"
+      ],
+      "python_script": false,
+      "dependencies": [
+        "roshbhatia/tap/agent-notes"
+      ]
+    },
+    {
+      "name": "gate-provider-prose-gate",
+      "kind": "provider",
+      "binary": "gate-provider-prose-gate",
+      "description": "Check a release note before publication",
+      "archive": "gate_provider_prose-gate_%{version}_%{os}_%{arch}.tar.gz",
+      "share": [
+        "share/gate/providers/prose-gate.yaml"
+      ],
+      "python_script": false,
+      "dependencies": [
+        "vale"
+      ]
+    },
+    {
+      "name": "gate-provider-read-router",
+      "kind": "provider",
+      "binary": "gate-provider-read-router",
+      "description": "Select the token parser lines needed for review",
+      "archive": "gate_provider_read-router_%{version}_%{os}_%{arch}.tar.gz",
+      "share": [
+        "share/gate/providers/read-router.yaml"
+      ],
+      "python_script": false
+    },
+    {
+      "name": "gate-review",
+      "kind": "tool",
+      "binary": "review",
+      "description": "Open a review ledger for the token parser change",
+      "archive": "gate_tool_review_%{version}_%{os}_%{arch}.tar.gz",
+      "share": [],
+      "python_script": false,
+      "dependencies": [
+        "git"
+      ]
+    },
+    {
+      "name": "gate-provider-review-gate",
+      "kind": "provider",
+      "binary": "gate-provider-review-gate",
+      "description": "Require a review ledger before the critic starts",
+      "archive": "gate_provider_review-gate_%{version}_%{os}_%{arch}.tar.gz",
+      "share": [
+        "share/gate/providers/review-gate.yaml"
+      ],
+      "python_script": false,
+      "dependencies": [
+        "roshbhatia/tap/gate-review"
+      ]
+    }
+  ]
+}
